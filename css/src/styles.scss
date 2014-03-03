@@ -1,0 +1,291 @@
+// Base
+a {
+	color:	$color-links;
+	text-decoration:	none;
+
+	&:hover {
+		text-decoration:	underline;
+	}
+}
+
+h2,
+h3 {
+	margin-top:	2em;
+}
+
+	h2 {
+		color:			$color-brand;
+		text-align:		center;
+		text-transform:	uppercase;
+	}
+
+	h3 {
+		text-transform:	uppercase;
+	}
+
+	h2 + h3 {
+		margin-top:	-0.3em;
+	}
+
+pre {
+	margin:	1.3em 0;
+
+	code {
+		display:	block;
+		padding:	0.6em 0.8em;
+
+		overflow-x:		auto;
+		word-wrap:		normal;
+		white-space:	pre;
+		font-size:		1.15em;
+		font-family:	monospace;
+		line-height:	1.5;
+	}
+}
+
+p > code {
+	padding:		1px 4px;
+	border:			solid 1px #ccc;
+	background:		#fafafa;
+
+	border-radius:	3px;
+}
+
+
+
+
+// Shared
+.structural-list {
+	margin:		0;
+	padding:	0;
+	list-style:	none;
+}
+	.inline-list {
+		@extend .structural-list;
+
+		> li {
+			display:	inline-block;
+		}
+	}
+
+
+// Header
+header[role="banner"] {
+	padding:		1em 0.6em 0.7em 0.6em;
+	max-height:		365px;
+	background:		#ccc url('#{$imgs}/layout/banner.jpg') no-repeat 50% 0;
+	text-align:		center;
+	color:			#fff;
+
+	@include pseudo-image('logo.png', 236px, 236px){
+		margin:	0 auto;
+	}
+
+	.project-title,
+	.project-summary {
+		margin:	0;
+	}
+
+		.project-title {
+			@include ir('title.png', auto, 51px);
+
+			margin-top:		0.5em;
+			margin-bottom:	0.2em;
+		}
+
+		.project-summary {
+			font-size:		1.3em;
+			text-shadow:	0 2px 2px rgba(4, 5, 5, 0.45);
+		}
+}
+
+// Download/view links
+.project-links {
+	margin-top:	2.2em;
+
+	> ul {
+		@extend .inline-list;
+
+		text-align:	center;
+	}
+}
+
+	.download-link {
+		$decoration-width:	35px;
+
+		display:		block;
+		position:		relative;
+		padding:		8px $decoration-width+18 10px 14px;
+		border:			solid 1px $color-links;
+
+		text-align:		left;
+		border-radius:	4px;
+
+		@include transition(all 0.3s);
+
+		@include pseudo-image('layout/download.png', $decoration-width, auto, after, $color-links){
+			position:	absolute;
+			top:		0;
+			bottom:		0;
+			right:		0;
+		}
+
+		&:hover {
+			background-color:	$color-links;
+			color:				#fff;
+			text-decoration:	none;
+
+			.download-extra {
+				display:	block;
+			}
+		}
+	}
+
+		.download-link-label {
+			margin:	0 0 0.2em 0;
+			font-size:	1.2em;
+		}
+
+		.download-details {
+			@extend .inline-list;
+
+			opacity:		0.75;
+			font-size:		0.8em;
+			line-height:	1.2;
+
+			.download-detail {
+				&:before {
+					content:	" • ";
+					display:	inline-block;
+					margin:		0 0.5em 0 0.1em;
+				}
+
+					&:first-child:before {
+						content:	"";
+						display:	none;
+					}
+			}
+		}
+
+		.download-extra {
+			$tooltip-width:		250px;
+			$tooltip-padding:	5px;
+
+			display:	none;
+			position:	absolute;
+			left:		50%;
+			bottom:		100%;
+			margin:		0 0 10px (-(($tooltip-width/2)+$tooltip-padding));
+			padding:	8px $tooltip-padding;
+			width:		$tooltip-width;
+
+			text-align:		center;
+			color:			#fff;
+			background:		#222;
+			background:		rgba(0,0,0,0.85);
+			line-height:	1.3;
+
+			border-radius:	3px;
+
+			&:after {
+				$triangle-size:	6px;
+
+				content:	"";
+				display:	block;
+				position:	absolute;
+				top:		100%;
+				left:		50%;
+				margin-left:	-($triangle-size/2);
+
+				border:	transparent $triangle-size solid;
+				border-top-color:	#222;
+				border-top-color:	rgba(0,0,0,0.85);
+				border-bottom:		none;
+			}
+		}
+
+	.nav-secondary {
+		position:		relative;
+		top:			-0.85em;
+		margin-left:	1em;
+		vertical-align:	middle;
+
+		&:before {
+			content:	"or ";
+			color:		#aaa;
+		}
+	}
+
+// Wall of text
+[role="main"] {
+	$content-extension:	20px;
+
+	max-width:	620px;
+	margin:		2.6em auto 1.6em auto;
+	padding:	0 $side-padding+$content-extension;
+
+	line-height:	1.6;
+
+	@include pseudo-image('layout/hr.png', auto, 22px);
+
+	> h2:first-child {
+		margin-top:	1.4em;
+	}
+
+	h3,
+	pre code {
+		margin-left:	-$content-extension;
+	}
+
+		pre code {
+			width:		100%;
+			padding:	($content-extension - 6) $content-extension;
+		}
+}
+
+	.miscellanea {
+		text-align:	center;
+	}
+
+// Footer
+footer[role="contentinfo"] {
+	margin-top:	3.2em;
+	padding:	0 $side-padding 1em $side-padding;
+	text-align:	center;
+	font-size:	0.8em;
+	color:		#666;
+
+	.copyright {
+		margin:	0 0 0.3em 0;
+	}
+
+	.credits {
+		@extend .inline-list;
+	}
+
+		.credits-credit {
+			&:before {
+				content:	" • ";
+				display:	inline-block;
+				margin:		0 0.3em 0 0.2em;
+			}
+
+			&:first-child:before {
+				content:	"";
+				display:	none;
+			}
+		}
+}
+
+
+@media only screen and (max-width: 550px){
+	// The "logo" was too big
+	header[role="banner"] {
+		&:before {
+			@include background-size(contain);
+
+			width:	150px;
+			height:	150px;
+		}
+	}
+}

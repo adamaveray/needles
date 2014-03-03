@@ -1,0 +1,25 @@
+@mixin image($path, $x: 50%, $y: 50%, $background: transparent, $repeat: no-repeat){
+	background:	$background url('#{$imgs}/#{$path}') $repeat $x $y;
+}
+
+@mixin ir($path, $width, $height){
+	@extend .ir;
+
+	width:	$width;
+	height:	$height;
+
+	@include image($path);
+}
+
+@mixin pseudo-image($path, $width, $height, $type: before, $background: transparent, $x: 50%, $y: 50%, $display: block, $repeat: no-repeat){
+	&:#{$type} {
+		content:	"";
+		display:	$display;
+		width:		$width;
+		height:		$height;
+
+		@include image($path, $x, $y, $background, $repeat);
+
+		@content;
+	}
+}

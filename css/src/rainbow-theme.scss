@@ -1,0 +1,56 @@
+pre,
+code {
+    font-family:	'Monaco', courier, monospace;
+}
+
+pre code {
+	background-color:	#1d1f21;
+	color:				#c5c8c6;
+}
+
+code {
+	.comment {
+		color: #969896;
+	}
+	
+	.variable.global,
+	.variable.class,
+	.variable.instance {
+		color: #cc6666;
+	}
+
+	.constant.numeric,
+	.constant.language,
+	.constant.hex-color,
+	.keyword.unit {
+		color: #de935f;
+	}
+	
+	.constant,
+	.entity,
+	.entity.class,
+	.support {
+		color: #f0c674;
+	}
+	
+	.constant.symbol,
+	.string {
+		color: #b5bd68;
+	}
+	
+	.entity.function,
+	.support.css-property,
+	.selector {
+		color: #81a2be;
+	}
+	
+	.keyword,
+	.storage {
+		color: #b294bb;
+	}
+
+	.needles,
+	.entity.function.needles {
+		color:	$color-brand;
+	}
+}

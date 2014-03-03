@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js" xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-AU" lang="en-AU"><!--<![endif]-->
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	
+	<title>Needles • A Javascript dependency injection container</title>
+	
+	<meta name="description" content="">
+
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+	<link rel="stylesheet" href="css/main.css" />	
+	<script src="js/vendor/modernizr-2.6.2.min.js"></script>
+</head>
+<body>
+<header role="banner">
+	<h1 class="project-title">Needles</h1>
+	<p class="project-summary">A lightweight Javascript dependency injection container</p>
+</header>
+
+<nav role="navigation" class="project-links">
+	<ul>
+		<li class="nav-item nav-primary">
+			<a class="download-link" href="https://raw.github.com/adamaveray/needles/master/needles.min.js">
+				<p class="download-link-label">Download</p>
+				<ul class="download-details">
+					<li class="download-detail download-detail-version">v0.1</li>
+					<li class="download-detail download-detail-date"><time datetime="2014-03-03T00:42:18+00:00">2 Mar 2014</time></li>
+				</ul>
+
+				<p class="download-extra">Minified, &lt;1kb, no dependencies</p>
+			</a>
+		</li>
+		<li class="nav-item nav-secondary">
+			<a href="https://github.com/adamaveray/needles">View on Github</a>
+		</li>
+	</ul>
+</nav>
+	
+<div id="main" role="main">
+	<h2 id="usage">Usage</h2>
+
+	<p>Prepare a new container by creating a new instance of the <code>Needles</code> class:</p>
+
+	<pre><code data-language="javascript">var container = new Needles();</code></pre>
+
+	<p>Needles is able to manage two different kinds of data: <em>services</em> and <em>parameters</em>.</p>
+
+	<h3 id="definingparameters">Defining Parameters</h3>
+
+	<p>A parameter is simply a constant value. To define a parameter, call <code>set()</code> on the container instance:</p>
+
+	<pre><code data-language="javascript">container.set(&apos;exampleParameter&apos;, &apos;example&apos;);
+container.set(&apos;otherParameter&apos;, &apos;something else&apos;);</code></pre>
+
+	<h3 id="definingservices">Defining Services</h3>
+
+	<p>A service is an object that does something as part of a larger system – for example, a templating engine, or an API interface. Almost any object could be a service.</p>
+
+	<p>Services are defined by calling <code>set()</code> with an anonymous function that returns an object:</p>
+
+	<pre><code data-language="javascript">container.set(&apos;example&apos;, function(container){
+    // The container instance will be provided as the first parameter
+    return new ExampleObject(container.get(&apos;exampleParameter&apos;));
+});</code></pre>
+
+	<p>The function will be provided the current container instance as the first parameter, allowing reference to other services or parameters.</p>
+
+	<p>Objects are only created when requested, so the definition order does not matter, and there is no unnecessary performance penalty since unused services are never loaded. </p>
+
+	<h3 id="bulkdefinitions">Bulk Definitions</h3>
+
+	<p>You can also define multiple parameters and services in bulk:</p>
+
+	<pre><code data-language="javascript">container.set({
+    exampleParameter: &apos;value&apos;,
+    exampleService:   function(){
+        /* ... */
+    }
+});</code></pre>
+
+	<p>You can also provide this to the initial constructor to do the same:</p>
+
+	<pre><code data-language="javascript">var container = new Needles({
+    exampleParameter: &apos;value&apos;,
+    exampleService:   function(){
+        /* ... */
+    }
+});</code></pre>
+
+	<p>The <code>set()</code> method returns the same container instance, allowing chaining:</p>
+
+	<pre><code data-language="javascript">container.set(&apos;exampleParameter&apos;, &apos;value&apos;)
+         .set(&apos;otherParameter&apos;, &apos;other&apos;);</code></pre>
+
+	<h3 id="accessingdependencies">Accessing Dependencies</h3>
+
+	<p>Once defined, accessing parameters or services is done by calling <code>get()</code>:</p>
+
+	<pre><code data-language="javascript">var example = container.get(&apos;exampleDependency&apos;);</code></pre>
+
+	<p>If an unknown service is requested, an error is thrown.</p>
+
+	<h2 id="advancedusage">Advanced Usage</h2>
+
+	<h3 id="protectingparameters">Protecting Parameters</h3>
+
+	<p>Any anonymous function provided is treated as a service, so if you want a service <em>to return a function</em>, you need to wrap the anonymous functions with the <code>protect()</code> method:</p>
+
+	<pre><code data-language="javascript">container.set(&apos;random&apos;, container.protect(function(){
+    return Math.random();
+}));</code></pre>
+
+	<h3 id="modifyingservicesaftercreation">Modifying Services after Creation</h3>
+
+	<p>In some cases, you may want to modify a service definition after it has been defined. To do this, call the <code>extend()</code> method to define additional code to be run on your service after it is created:</p>
+
+	<pre><code data-language="javascript">// Initial definition
+container.set(&apos;example&apos;, function(container){
+    return new Example();
+});
+
+// Extension
+container.extend(&apos;example&apos;, function(instance, container){
+    // Modify instance
+    instance.setOption(container.get(&apos;exampleOption&apos;));
+
+    return instance;
+});</code></pre>
+
+	<p>The first argument to the function provided to <code>extend</code> will be the service object, and the second is the container instance. The name of the service will be provided as the third parameter, however generally will not be needed.</p>
+
+	<h3 id="accessingaservicecreationfunction">Accessing a Service Creation Function</h3>
+
+	<p>Calling <code>get()</code> for a service will call the defined function, but to access the original function itself, call <code>raw()</code>:</p>
+
+	<pre><code data-language="javascript">container.set(&apos;example&apos;, function(){
+    return new Example();
+});
+
+var fn = container.raw(&apos;example&apos;);</code></pre>
+
+	<h3 id="nestingcontainers">Nesting Containers</h3>
+
+	<p>By using a container instance as a service within another container, you can have nested dependencies:</p>
+
+	<pre><code data-language="javascript">// Parent container
+var container = new Needles();
+
+container.set(&apos;nested&apos;, function(){
+    // Child container
+    var subcontainer = new Needles();
+    subcontainer.set(&apos;something&apos;, function(){
+        return new Something();
+    });
+
+    return subcontainer;
+});</code></pre>
+
+	<p>You can then access a service on the child by chaining the method call:</p>
+
+	<pre><code data-language="javascript">var something = container.get(&apos;nested&apos;).get(&apos;something&apos;);</code></pre>
+
+	<h3 id="definingfactoryservices">Defining Factory Services</h3>
+
+	<p>By default, each time you retrieve a service, the <em>same instance</em> will be returned – so the service function will only be called once. If you want a <em>different</em> instance returned each time – having the service function called every time – wrap the function with the <code>factory()</code> method:</p>
+
+	<pre><code data-language="javascript">container.set(&apos;example&apos;, container.factory(function(container){
+    return new Example();
+}));</code></pre>
+
+	<section class="miscellanea">
+		<h2 id="contributing">Contributing</h2>
+
+		<p>See the <a href="CONTRIBUTING.md">Contributing information</a> for details. Basically: open a pull request!</p>
+
+
+		<h2 id="licence">Licence</h2>
+
+		<p>Needles is <a href="LICENSE">released under the MIT license</a>. Copyright 2014 Adam Averay.</p>
+	</section>
+</div>
+
+<footer role="contentinfo">
+	<p class="copyright">© 2014 <a href="https://twitter.com/adamaveray">Adam Averay</a></p>
+	<ul class="credits">
+		<li class="credits-credit">
+			Banner image by <a href="http://www.flickr.com/photos/brandejackson/2265825497/">Brande Jackson</a>
+		</li>
+		<li class="credits-credit">
+			Logo image from <a href="http://www.gwsjoeys.org.au">GWS Joeys</a>
+		</li>
+	</ul>
+</footer>
+
+<script src="js/scripts.min.js"></script>
+<!--
+<script>
+(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+e.src='//www.google-analytics.com/analytics.js';
+r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+ga('create','UA-XXXXX-X');ga('send','pageview');
+</script>
+-->
+</body>
+</html>
