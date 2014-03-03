@@ -1,0 +1,33 @@
+{
+	"private":	true,
+	
+	"name":			"needles",
+	"version":		"0.1",
+	"description":	"A simple Javascript dependency injection container",
+	"homepage":		"http://adamaveray.github.io/needles",
+	"license":		"MIT",
+	"author":		"Adam Averay <adam@averay.com>",
+	"repository":	{
+		"type":	"git",
+		"url":	"https://github.com/adamaveray/needles.git"
+	},
+	"keywords":	[
+		"dependency injection",
+		"dependency",
+		"injection"
+	],
+
+	"main":		"needles-0.1.min.js",
+	"files":	[
+		"needles.js",
+		"lib/jasmine-core"
+	],
+	"ignore":	[
+		"needles.min.js",
+		"test",
+		"*.md",
+		"*.json",
+		"LICENSE",
+		"**/.*"
+	]
+}
