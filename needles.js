@@ -3,27 +3,27 @@
  *
  * A simple Javascript dependency injection container
  * 
- * @version		0.1
+ * @version		0.1.1
  * @link		http://adamaveray.github.io/needles
  * @copyright	Adam Averay 2014
  * @license		MIT
  */
-/*! Needles 0.1 | adamaveray.github.io/needles | © 2014 Adam Averay | MIT */
+/*! Needles 0.1.1 | adamaveray.github.io/needles | © 2014 Adam Averay | MIT */
 (function(root, undefined){
 	/**
 	 * @constructor
 	 */
-	var Needles	= root['Needles'] = function(dependencies){
+	var Needles	= root.Needles = function(dependencies){
 		if(!(this instanceof Needles)){
 			// Called without `new`
 			return new Needles(dependencies);
 		}
 		
 		// Prepare containers
-		this.values		= {};
-		this.services	= {};
-		this.factories	= {};
-		this.extensions	= {};
+		this._values		= {};
+		this._services		= {};
+		this._factories		= {};
+		this._extensions	= {};
 
 		if(dependencies){
 			// Load initial dependencies
@@ -64,19 +64,18 @@
 	 * @throws {Error}		The dependency could not be found
 	 */
 	proto.get	= function(name){
-		if(this.values[name] === undefined){
-			var value,
-				isFactory	= false;
+		if(this._values[name] === undefined){
+			var value;
 
-			if(this.services[name] === undefined){
+			if(this._services[name] === undefined){
 				// Unknown dependency
 				throw new Error('Unknown dependency "'+name+'"');
 			}
 			
 			// Initialise dependency
-			value	= this.services[name](this, name);
+			value	= this._services[name](this, name);
 
-			var extensions	= this.extensions[name];
+			var extensions	= this._extensions[name];
 			if(extensions !== undefined){
 				for(var i = 0; i < extensions.length; i++){
 					// Run extension
@@ -84,16 +83,16 @@
 				}
 			}
 
-			if(this.factories[name]){
+			if(this._factories[name]){
 				// Value must be reloaded each time - do not save
 				return value;
 			}
 
 			// Store value
-			this.values[name]	= value;
+			this._values[name]	= value;
 		}
 
-		return this.values[name];
+		return this._values[name];
 	};
 
 	/**
@@ -116,12 +115,12 @@
 			// Single given
 			if(isCallable(dependency)){
 				// Dependency is service
-				this.services[name]	= dependency;
+				this._services[name]	= dependency;
 
 			} else if(isWrappedService(dependency, 'factory')){
 				// Dependency is factory
-				this.services[name]		= unwrapService(dependency);
-				this.factories[name]	= true;
+				this._services[name]		= unwrapService(dependency);
+				this._factories[name]	= true;
 
 			} else {
 				if(isWrappedService(dependency, 'protected')){
@@ -130,7 +129,7 @@
 				}
 
 				// Dependency is parameter
-				this.values[name]	= dependency;
+				this._values[name]	= dependency;
 			}
 		}
 
@@ -150,11 +149,11 @@
 			throw new Error('Extension is not callable');
 		}
 
-		if(this.extensions[name] === undefined){
-			this.extensions[name]	= [];
+		if(this._extensions[name] === undefined){
+			this._extensions[name]	= [];
 		}
 
-		this.extensions[name].push(extension);
+		this._extensions[name].push(extension);
 
 		return this;
 	};
@@ -166,13 +165,13 @@
 	 * @returns {*}			The raw service function or the parameter value
 	 */
 	proto.raw	= function(name){
-		if(this.services[name] !== undefined){
+		if(this._services[name] !== undefined){
 			// Raw service
-			return this.services[name];
+			return this._services[name];
 		}
 
 		// No service - use value
-		return this.values[name];
+		return this._values[name];
 	};
 
 	/**

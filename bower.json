@@ -2,7 +2,7 @@
 	"private":	true,
 	
 	"name":			"needles",
-	"version":		"0.1",
+	"version":		"0.1.1",
 	"description":	"A simple Javascript dependency injection container",
 	"homepage":		"http://adamaveray.github.io/needles",
 	"license":		"MIT",

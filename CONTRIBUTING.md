@@ -11,7 +11,7 @@ If you have changes you'd like to contribute, please open a pull request! Here's
 
 4. Make the tests pass.
 
-5. Minify the source. We use the Closure Compiler ([here's an online one](http://closure-compiler.appspot.com/home)). Use the "advanced" level.
+5. Minify the source. We use Uglify2 ([you can run it online here](http://lisperator.net/uglifyjs/)).
 
 6. Push to your fork and [submit a pull request](https://help.github.com/articles/using-pull-requests#changing-the-branch-range-and-destination-repository). Bonus points if you include a GIF, especially a [tacky](http://www.picdesi.com/upload/comment/thanku/thank-you-030.gif), [dated](http://www.oilsafe.it/wp-content/uploads/2010/10/under-construction.gif), or just [generally painful](http://i.imgur.com/7K5DjwW.gif) one!
 

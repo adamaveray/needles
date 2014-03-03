@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Tests</title>
+
+	<link href="vendor/jasmine.css" rel="stylesheet" type="text/css" />
+	<script src="vendor/jasmine.js"></script>
+	<script src="vendor/jasmine-html.js"></script>
+
+	<script src="../needles.min.js"></script>
+	<script src="needlesTest.js"></script>
+	
+	<script>
+	(function(jasmine, window){
+		var env			= jasmine.getEnv(),
+			reporter	= new jasmine.HtmlReporter();
+
+		env.updateInterval	= 1000;
+		env.addReporter(reporter);
+		env.specFilter	= function(spec){
+			return reporter.specFilter(spec);
+		};
+
+		var previousOnload	= window.onload;
+		window.onload	= function(){
+			previousOnload && previousOnload();
+
+			runTests();
+		};
+
+		function runTests(){
+			env.execute();
+		}
+	}(jasmine, window));
+	</script>
+</head>
+<body>
+</body>
+</html>
